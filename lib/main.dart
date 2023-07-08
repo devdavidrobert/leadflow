@@ -18,7 +18,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Lead Flow',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
       home: BlocProvider<AuthBloc>(
@@ -64,8 +64,15 @@ class HomePage extends StatelessWidget {
           return const RegisterView();
         } else {
           return const Scaffold(
-            body: CircularProgressIndicator(),
-          );
+              //   body: CircularProgressIndicator(
+              //     value: 0.5,
+              //     strokeWidth: 4,
+              //     backgroundColor: Colors.grey,
+              //     valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+              //   ),
+              //
+              //
+              );
         }
       },
     );

@@ -78,26 +78,29 @@ class _LeadsViewState extends State<LeadsView> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const Card(
-              child: Padding(
-                padding: EdgeInsets.all(12.0),
-                child: ListTile(
-                  title: Center(
-                    child: Text(
-                      '500',
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(0),
+              child: Card(
+                color: Colors.blue[50],
+                child: const Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: ListTile(
+                    title: Center(
+                      child: Text(
+                        '500',
+                        style: TextStyle(
+                          fontSize: 30,
+                        ),
                       ),
                     ),
-                  ),
-                  subtitle: Center(
-                    child: Text(
-                      'Leads converted: 200',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.blueAccent,
+                    subtitle: Center(
+                      child: Text(
+                        'Leads converted: 200',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.blueAccent,
+                        ),
                       ),
                     ),
                   ),
@@ -138,10 +141,10 @@ class _LeadsViewState extends State<LeadsView> {
                           },
                         );
                       } else {
-                        return const CircularProgressIndicator();
+                        return Container();
                       }
                     default:
-                      return const CircularProgressIndicator();
+                      return Container();
                   }
                 },
               ),

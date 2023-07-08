@@ -7,6 +7,20 @@ import 'package:leadflow/utilities/dialogs/cannot_share_empty_lead_dialog.dart';
 import 'package:leadflow/utilities/dialogs/generics/get_arguments.dart';
 import 'package:share_plus/share_plus.dart';
 
+class CheckboxController {
+  final ValueNotifier<bool> valueNotifier;
+
+  CheckboxController(bool initialValue)
+      : valueNotifier = ValueNotifier<bool>(initialValue);
+
+  bool get value => valueNotifier.value;
+  set value(bool newValue) => valueNotifier.value = newValue;
+
+  void dispose() {
+    valueNotifier.dispose();
+  }
+}
+
 class CreateUpdateLeadView extends StatefulWidget {
   const CreateUpdateLeadView({Key? key}) : super(key: key);
 
@@ -20,37 +34,44 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
   @override
   void initState() {
     _leadsServices = FirebaseCloudStorage();
-    _textController = TextEditingController();
-    _textController2 = TextEditingController();
-    _textController3 = TextEditingController();
-    _textController4 = TextEditingController(text: _selectedPackage);
-    _textController5 = TextEditingController(text: _selectedActivity);
-    _textController6 = TextEditingController();
+    _commentController = TextEditingController();
+    _phoneNumberController = TextEditingController();
+    _dateController = TextEditingController();
+    _packageController = TextEditingController(text: _selectedPackage);
+    _activityController = TextEditingController(text: _selectedActivity);
+    _prospectNameController = TextEditingController();
+    _saleCheckboxController = CheckboxController(_isSale);
+    _saleCheckboxController.valueNotifier
+        .addListener(_handleSaleCheckboxValueChanged);
+
     super.initState();
   }
 
   late final FirebaseCloudStorage _leadsServices;
-  late final TextEditingController _textController;
-  late final TextEditingController _textController2;
-  late final TextEditingController _textController3;
-  late final TextEditingController _textController4;
-  late final TextEditingController _textController5;
-  late final TextEditingController _textController6;
+  late final TextEditingController _commentController;
+  late final TextEditingController _phoneNumberController;
+  late final TextEditingController _dateController;
+  late final TextEditingController _packageController;
+  late final TextEditingController _activityController;
+  late final TextEditingController _prospectNameController;
+  late final CheckboxController _saleCheckboxController;
+
   String _selectedActivity = 'Marketstorm';
   String _selectedPackage = 'Flexx12';
-  bool _isSale = false;
+  final bool _isSale = false;
 
   void _textControllerListener() async {
     final lead = _lead;
     if (lead == null) {
       return;
     }
-    final text = _textController.text;
-    final int phone = int.tryParse(_textController2.text) ?? 0;
-    final appointDate = _textController3.text;
-    final package = _textController4.text;
-    final activity = _textController5.text;
-    final name = _textController6.text;
+    final text = _commentController.text;
+    final int phone = int.tryParse(_phoneNumberController.text) ?? 0;
+    final appointDate = _dateController.text;
+    final package = _packageController.text;
+    final activity = _activityController.text;
+    final name = _prospectNameController.text;
+    final isSale = _saleCheckboxController.value;
     await _leadsServices.updateLead(
       documentId: lead.documentId,
       comment: text,
@@ -58,7 +79,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
       activity: activity,
       appointDate:
           appointDate, // Replace this with the appropriate Timestamp value
-      isSale: _isSale,
+      isSale: isSale,
       package: package,
       phoneNumber: phone,
       isTv: false,
@@ -66,18 +87,22 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
   }
 
   void _setupTextControllerListener() {
-    _textController.removeListener(_textControllerListener);
-    _textController.addListener(_textControllerListener);
-    _textController2.removeListener(_textControllerListener);
-    _textController2.addListener(_textControllerListener);
-    _textController3.removeListener(_textControllerListener);
-    _textController3.addListener(_textControllerListener);
-    _textController4.removeListener(_textControllerListener);
-    _textController4.addListener(_textControllerListener);
-    _textController5.removeListener(_textControllerListener);
-    _textController5.addListener(_textControllerListener);
-    _textController6.removeListener(_textControllerListener);
-    _textController6.addListener(_textControllerListener);
+    _commentController.removeListener(_textControllerListener);
+    _commentController.addListener(_textControllerListener);
+    _phoneNumberController.removeListener(_textControllerListener);
+    _phoneNumberController.addListener(_textControllerListener);
+    _dateController.removeListener(_textControllerListener);
+    _dateController.addListener(_textControllerListener);
+    _packageController.removeListener(_textControllerListener);
+    _packageController.addListener(_textControllerListener);
+    _activityController.removeListener(_textControllerListener);
+    _activityController.addListener(_textControllerListener);
+    _prospectNameController.removeListener(_textControllerListener);
+    _prospectNameController.addListener(_textControllerListener);
+    _saleCheckboxController.valueNotifier
+        .removeListener(_handleSaleCheckboxValueChanged);
+    _saleCheckboxController.valueNotifier
+        .addListener(_handleSaleCheckboxValueChanged);
   }
 
   Future<CloudLead> createOrGetExistingLead(
@@ -86,12 +111,13 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
     final widgetLead = context.getArgument<CloudLead>();
     if (widgetLead != null) {
       _lead = widgetLead;
-      _textController.text = widgetLead.comment;
-      _textController6.text = widgetLead.name;
-      _textController2.text = widgetLead.phoneNumber.toString();
-      _textController3.text = widgetLead.appointDate;
-      _textController4.text = widgetLead.package;
-      _textController5.text = widgetLead.activity;
+      _commentController.text = widgetLead.comment;
+      _prospectNameController.text = widgetLead.name;
+      _phoneNumberController.text = widgetLead.phoneNumber.toString();
+      _dateController.text = widgetLead.appointDate;
+      _packageController.text = widgetLead.package;
+      _activityController.text = widgetLead.activity;
+      _saleCheckboxController.value = widgetLead.isSale;
       return widgetLead;
     }
 
@@ -109,7 +135,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
   //deleting a lead => this is called when one exits without writing anything
   void _deleteLeadIfTextIsEmpty() {
     final lead = _lead;
-    if (_textController.text.isEmpty && lead != null) {
+    if (_commentController.text.isEmpty && lead != null) {
       _leadsServices.deleteLead(
         documentId: lead.documentId,
       );
@@ -119,12 +145,13 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
   //save a lead
   void _saveLeadIfTextLeadEmpty() async {
     final lead = _lead;
-    final text = _textController.text;
-    final int phone = int.tryParse(_textController2.text) ?? 0;
-    final appointDate = _textController3.text;
-    final package = _textController4.text;
-    final activity = _textController5.text;
-    final name = _textController6.text;
+    final text = _commentController.text;
+    final int phone = int.tryParse(_phoneNumberController.text) ?? 0;
+    final appointDate = _dateController.text;
+    final package = _packageController.text;
+    final activity = _activityController.text;
+    final name = _prospectNameController.text;
+    final isSale = _saleCheckboxController.value;
     if (lead != null && text.isNotEmpty) {
       await _leadsServices.updateLead(
         documentId: lead.documentId,
@@ -132,7 +159,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
         name: name,
         activity: activity,
         appointDate: appointDate,
-        isSale: false,
+        isSale: isSale,
         package: package,
         phoneNumber: phone,
         isTv: false,
@@ -144,13 +171,37 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
   void dispose() {
     _deleteLeadIfTextIsEmpty();
     _saveLeadIfTextLeadEmpty();
-    _textController.dispose();
-    _textController2.dispose();
-    _textController3.dispose();
-    _textController4.dispose();
-    _textController5.dispose();
-    _textController6.dispose();
+    _commentController.dispose();
+    _phoneNumberController.dispose();
+    _dateController.dispose();
+    _packageController.dispose();
+    _activityController.dispose();
+    _prospectNameController.dispose();
+    _saleCheckboxController.valueNotifier
+        .removeListener(_handleSaleCheckboxValueChanged);
+    _saleCheckboxController.dispose();
     super.dispose();
+  }
+
+  void _handleSaleCheckboxValueChanged() {
+    bool newValue = _saleCheckboxController.valueNotifier.value;
+    // Perform actions based on the new checkbox value
+    if (newValue) {
+    } else {
+      // Checkbox is unchecked
+    }
+  }
+
+  CheckboxListTile buildSaleCheckbox() {
+    return CheckboxListTile(
+      title: const Text('Sale'),
+      value: _saleCheckboxController.value,
+      onChanged: (value) {
+        setState(() {
+          _saleCheckboxController.value = value ?? false;
+        });
+      },
+    );
   }
 
   @override
@@ -161,9 +212,9 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
         actions: [
           IconButton(
             onPressed: () async {
-              final comment = _textController.text;
-              final phone = _textController2.text;
-              final appointDate = _textController3.text;
+              final comment = _commentController.text;
+              final phone = _phoneNumberController.text;
+              final appointDate = _dateController.text;
               if (_lead == null ||
                   comment.isEmpty ||
                   phone.isEmpty ||
@@ -192,7 +243,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                   //Enter prospect's name
                   const SizedBox(height: 16.0),
                   TextField(
-                    controller: _textController6,
+                    controller: _prospectNameController,
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
@@ -206,7 +257,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                   //Enter customer's phone number
                   const SizedBox(height: 16.0),
                   TextFormField(
-                    controller: _textController2,
+                    controller: _phoneNumberController,
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(
@@ -223,7 +274,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                   //Schedule appointment date
                   const SizedBox(height: 16.0),
                   TextFormField(
-                    controller: _textController3,
+                    controller: _dateController,
                     textAlign: TextAlign.center,
                     onTap: () async {
                       final selectedDate = await showDatePicker(
@@ -236,7 +287,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                         final formattedDate =
                             DateFormat('yyyy-MM-dd').format(selectedDate);
                         setState(() {
-                          _textController3.text = formattedDate;
+                          _dateController.text = formattedDate;
                         });
                       }
                     },
@@ -251,19 +302,18 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                     width: 16.0,
                   ),
                   CheckboxListTile(
-                    title: const Text('Sale'),
-                    value: _isSale,
-                    onChanged: (value) {
-                      setState(() {
-                        _isSale = value ?? false;
-                      });
-                    },
-                  ),
+                      title: const Text('Sale'),
+                      value: _saleCheckboxController.value,
+                      onChanged: (value) {
+                        setState(() {
+                          _saleCheckboxController.value = value ?? false;
+                        });
+                      }),
                   const SizedBox(height: 16.0),
                   Visibility(
                     visible: false,
                     child: TextFormField(
-                      controller: _textController4,
+                      controller: _packageController,
                       decoration: const InputDecoration(
                         labelText: 'Package',
                       ),
@@ -274,7 +324,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                     onChanged: (newValue) {
                       setState(() {
                         _selectedPackage = newValue!;
-                        _textController4.text = newValue;
+                        _packageController.text = newValue;
                       });
                     },
                     items: const [
@@ -316,7 +366,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                   Visibility(
                     visible: false,
                     child: TextFormField(
-                      controller: _textController5,
+                      controller: _activityController,
                       decoration: const InputDecoration(
                         labelText: 'Activity',
                       ),
@@ -327,7 +377,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                     onChanged: (newActivity) {
                       setState(() {
                         _selectedActivity = newActivity!;
-                        _textController5.text = newActivity;
+                        _activityController.text = newActivity;
                       });
                     },
                     items: const [
@@ -347,7 +397,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                   ),
                   const SizedBox(height: 16.0),
                   TextField(
-                    controller: _textController,
+                    controller: _commentController,
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
@@ -357,16 +407,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(
-                    onPressed: () async {
-                      // final email = _email.text;
-                      // final password = _password.text;
-                      // context.read<CloudLead>().add(
-                      //       AuthEventLogIn(
-                      //         email,
-                      //         password,
-                      //       ),
-                      //     );
-                    },
+                    onPressed: () async {},
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(327, 40),
                       backgroundColor: Colors.green,
