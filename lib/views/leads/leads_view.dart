@@ -20,25 +20,55 @@ class LeadsView extends StatefulWidget {
 class _LeadsViewState extends State<LeadsView> {
   late final FirebaseCloudStorage _leadsServices;
   String get userId => AuthService.firebase().currentUser!.id;
+  late String _salutation;
+  late String _loggedInUserName;
 
   @override
   void initState() {
     _leadsServices = FirebaseCloudStorage();
+    _salutation = _getSalutation();
+    _loggedInUserName =
+        // 'David Robert';
+        AuthService.firebase().currentUser!.diplayname;
     super.initState();
   }
 
-//screen structure
+  String _getSalutation() {
+    final now = DateTime.now();
+    if (now.hour >= 0 && now.hour < 12) {
+      return 'Good morning';
+    } else if (now.hour >= 12 && now.hour < 17) {
+      return 'Good afternoon';
+    } else {
+      return 'Good evening';
+    }
+  }
+
+  //screen structure
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text('My Leads'),
-        titleTextStyle: const TextStyle(
-          decoration: TextDecoration.underline,
-          color: Colors.blue,
-          fontSize: 20,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _salutation,
+              style: const TextStyle(
+                color: Colors.blueGrey,
+                fontSize: 12,
+              ),
+            ),
+            Text(
+              _loggedInUserName,
+              style: const TextStyle(
+                color: Colors.blue,
+                fontSize: 14,
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(
@@ -51,7 +81,20 @@ class _LeadsViewState extends State<LeadsView> {
             ),
           ),
           PopupMenuButton<MenuAction>(
-            color: Colors.black,
+            itemBuilder: (context) {
+              return const [
+                PopupMenuItem<MenuAction>(
+                  value: MenuAction.logout,
+                  child: Text(
+                    'Log Out',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ];
+            },
+            color: Colors.black, // Set the background color to white
             onSelected: (value) async {
               switch (value) {
                 case MenuAction.logout:
@@ -63,14 +106,6 @@ class _LeadsViewState extends State<LeadsView> {
                   }
               }
             },
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem<MenuAction>(
-                  value: MenuAction.logout,
-                  child: Text('Log Out'),
-                ),
-              ];
-            },
           )
         ],
       ),
@@ -80,24 +115,23 @@ class _LeadsViewState extends State<LeadsView> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(0),
-              child: Card(
-                color: Colors.blue[50],
-                child: const Padding(
+              child: const Card(
+                child: Padding(
                   padding: EdgeInsets.all(12.0),
                   child: ListTile(
                     title: Center(
                       child: Text(
                         '500',
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 25,
                         ),
                       ),
                     ),
                     subtitle: Center(
                       child: Text(
-                        'Leads converted: 200',
+                        'LEADS CREATED',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 10,
                           fontWeight: FontWeight.normal,
                           color: Colors.blueAccent,
                         ),
@@ -109,10 +143,11 @@ class _LeadsViewState extends State<LeadsView> {
             ),
             const SizedBox(height: 25.0),
             const Text(
-              'Recent leads',
+              'RECENT LEADS',
+              textAlign: TextAlign.end,
               style: TextStyle(
                 fontSize: 12,
-                decoration: TextDecoration.underline,
+                // decoration: TextDecoration.underline,
               ),
             ),
             Expanded(

@@ -301,14 +301,20 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                     height: 16.0,
                     width: 16.0,
                   ),
+
+                  const SizedBox(
+                    height: 16.0,
+                    width: 16.0,
+                  ),
                   CheckboxListTile(
-                      title: const Text('Sale'),
-                      value: _saleCheckboxController.value,
-                      onChanged: (value) {
-                        setState(() {
-                          _saleCheckboxController.value = value ?? false;
-                        });
-                      }),
+                    title: const Text('Sale'),
+                    value: _saleCheckboxController.value,
+                    onChanged: (value) {
+                      setState(() {
+                        _saleCheckboxController.value = value ?? false;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 16.0),
                   Visibility(
                     visible: false,
@@ -402,12 +408,15 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     decoration: const InputDecoration(
+                      label: Text('Comment'),
                       hintText: 'Start typing here',
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(
-                    onPressed: () async {},
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                    },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(327, 40),
                       backgroundColor: Colors.green,

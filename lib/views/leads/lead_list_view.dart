@@ -39,54 +39,53 @@ class LeadsListView extends StatelessWidget {
 
         return ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Card(
-            child: ListTile(
-              onTap: () {
-                onTap(lead);
-              },
-              leading: CircleAvatar(
-                backgroundColor: Colors.blue[100],
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: 1,
-                    child: Text(
-                      remainingDays.toString(),
-                      textAlign: TextAlign.center,
-                    )),
-              ),
-              title: Text(
-                lead.name,
-                maxLines: 1,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 14,
+          child: ListTile(
+            onTap: () {
+              onTap(lead);
+            },
+            leading: CircleAvatar(
+              backgroundColor: Colors.blue[100],
+              child: Align(
+                alignment: Alignment.centerLeft,
+                widthFactor: 1,
+                child: Text(
+                  remainingDays.toString(),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              subtitle: Text(
-                lead.package,
-                maxLines: 1,
-                style: const TextStyle(
-                  fontSize: 12,
-                ),
+            ),
+            title: Text(
+              lead.name,
+              maxLines: 1,
+              softWrap: true,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 12,
               ),
-              trailing: CircleAvatar(
-                backgroundColor: Colors.green[100],
-                child: IconButton(
-                  onPressed: () async {
-                    final callPhone = lead.phoneNumber;
-                    final Uri url = Uri(
-                      scheme: 'tel',
-                      path: "+254$callPhone",
-                    );
-                    if (await canLaunchUrl(url)) {
-                      await launchUrl(url);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  },
-                  icon: const Icon(Icons.call),
-                ),
+            ),
+            subtitle: Text(
+              lead.package,
+              maxLines: 1,
+              style: const TextStyle(
+                fontSize: 10,
+              ),
+            ),
+            trailing: CircleAvatar(
+              backgroundColor: Colors.green[100],
+              child: IconButton(
+                onPressed: () async {
+                  final callPhone = lead.phoneNumber;
+                  final Uri url = Uri(
+                    scheme: 'tel',
+                    path: "+254$callPhone",
+                  );
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+                },
+                icon: const Icon(Icons.call),
               ),
             ),
           ),
