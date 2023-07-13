@@ -20,16 +20,13 @@ class LeadsView extends StatefulWidget {
 class _LeadsViewState extends State<LeadsView> {
   late final FirebaseCloudStorage _leadsServices;
   String get userId => AuthService.firebase().currentUser!.id;
+  String get userEmail => AuthService.firebase().currentUser!.email;
   late String _salutation;
-  late String _loggedInUserName;
 
   @override
   void initState() {
     _leadsServices = FirebaseCloudStorage();
     _salutation = _getSalutation();
-    _loggedInUserName =
-        // 'David Robert';
-        AuthService.firebase().currentUser!.diplayname;
     super.initState();
   }
 
@@ -62,10 +59,10 @@ class _LeadsViewState extends State<LeadsView> {
               ),
             ),
             Text(
-              _loggedInUserName,
+              userEmail,
               style: const TextStyle(
                 color: Colors.blue,
-                fontSize: 14,
+                fontSize: 10,
               ),
             ),
           ],

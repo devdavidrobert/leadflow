@@ -66,12 +66,14 @@ class _RegisterViewState extends State<RegisterView> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: const Text('Register'),
+          title: const Text(
+            'REGISTER',
+          ),
           titleTextStyle: const TextStyle(
-            decoration: TextDecoration.underline,
+            // decoration: TextDecoration.underline,
             color: Colors.blue,
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            // fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: const Color(0xFFffffff),

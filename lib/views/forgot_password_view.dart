@@ -50,13 +50,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: const Text(
-            'Forgot Password',
+            'FORGOT PASSWORD',
+            textAlign: TextAlign.center,
           ),
           titleTextStyle: const TextStyle(
-            decoration: TextDecoration.underline,
+            // decoration: TextDecoration.underline,
             color: Colors.blue,
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            // fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: const Color(0xFFffffff),

@@ -17,11 +17,13 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
+  late final TextEditingController _phonenumber;
   late final TextEditingController _password;
 
   @override
   void initState() {
     _email = TextEditingController();
+    _phonenumber = TextEditingController();
     _password = TextEditingController();
     super.initState();
   }
@@ -29,6 +31,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   void dispose() {
     _email.dispose();
+    _phonenumber.dispose();
     _password.dispose();
     super.dispose();
   }
@@ -61,10 +64,10 @@ class _LoginViewState extends State<LoginView> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: const Text(''),
+          title: const Text('LOGIN'),
           titleTextStyle: const TextStyle(
             color: Colors.blue,
-            fontSize: 40,
+            fontSize: 20,
           ),
         ),
         backgroundColor: const Color(0xFFffffff),
@@ -91,6 +94,32 @@ class _LoginViewState extends State<LoginView> {
                         fontSize: 12,
                       ),
                       hintText: 'Enter your email here.',
+                      hintStyle: const TextStyle(
+                        color: Colors.green,
+                      ),
+                      filled: false,
+                      fillColor: Colors.green[0],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 25.0),
+                Center(
+                  child: TextField(
+                    controller: _phonenumber,
+                    keyboardType: TextInputType.phone,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                      enabledBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                      floatingLabelStyle: const TextStyle(
+                        fontSize: 12,
+                      ),
+                      hintText: 'Enter your phone number here.',
                       hintStyle: const TextStyle(
                         color: Colors.green,
                       ),
