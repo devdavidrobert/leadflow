@@ -203,6 +203,7 @@ class _LoginViewState extends State<LoginView> {
                     'Not registered yet? Register here!',
                   ),
                 ),
+                
               ],
             ),
           ),

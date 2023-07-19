@@ -13,3 +13,6 @@ class CouldNotUpdateLeadException extends CloudStorageException {}
 
 //Delete
 class CouldNotDeleteLeadException extends CloudStorageException {}
+
+//count records
+class CouldNotGetTotalLeadsException extends CloudStorageException{}

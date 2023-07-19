@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:leadflow/services/cloud/cloud_lead.dart';
-// import 'package:leadflow/utilities/dialogs/delete_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 typedef LeadCallback = void Function(CloudLead lead);

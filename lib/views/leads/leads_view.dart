@@ -22,12 +22,26 @@ class _LeadsViewState extends State<LeadsView> {
   String get userId => AuthService.firebase().currentUser!.id;
   String get userEmail => AuthService.firebase().currentUser!.email;
   late String _salutation;
+  late String _leadsCount;
 
   @override
   void initState() {
     _leadsServices = FirebaseCloudStorage();
     _salutation = _getSalutation();
+    _updateLeadsCount();
+    _leadsCount;
     super.initState();
+  }
+
+  _updateLeadsCount() async {
+    try {
+      final totalLeadsCount =
+          await _leadsServices.getTotalLeadsCount(ownerUserId: userId);
+      _leadsCount = totalLeadsCount.toString();
+    } catch (e) {
+      // Handle any errors that may occur during count retrieval
+      // print("Error fetching leads count: $e");
+    }
   }
 
   String _getSalutation() {
@@ -112,19 +126,19 @@ class _LeadsViewState extends State<LeadsView> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(0),
-              child: const Card(
+              child: Card(
                 child: Padding(
                   padding: EdgeInsets.all(12.0),
                   child: ListTile(
                     title: Center(
                       child: Text(
-                        '500',
-                        style: TextStyle(
+                        _leadsCount,
+                        style: const TextStyle(
                           fontSize: 25,
                         ),
                       ),
                     ),
-                    subtitle: Center(
+                    subtitle: const Center(
                       child: Text(
                         'LEADS CREATED',
                         style: TextStyle(

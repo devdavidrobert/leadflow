@@ -51,6 +51,21 @@ class FirebaseCloudStorage {
           .map((doc) => CloudLead.fromSnapshot(doc))
           .where((lead) => lead.ownerUserId == ownerUserId));
 
+//count records.
+  Future<int> getTotalLeadsCount({required String ownerUserId}) async {
+    try {
+      final snapshot = await leads
+          .where(
+            ownerUserIdFieldName,
+            isEqualTo: ownerUserId,
+          )
+          .get();
+      return snapshot.size;
+    } catch (e) {
+      throw CouldNotGetTotalLeadsException();
+    }
+  }
+
   Future<Iterable<CloudLead>> getLeads({required String ownerUserId}) async {
     try {
       return await leads
