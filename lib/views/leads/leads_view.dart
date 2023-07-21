@@ -22,26 +22,12 @@ class _LeadsViewState extends State<LeadsView> {
   String get userId => AuthService.firebase().currentUser!.id;
   String get userEmail => AuthService.firebase().currentUser!.email;
   late String _salutation;
-  late Future<int> _leadsCount;
 
   @override
   void initState() {
     _leadsServices = FirebaseCloudStorage();
     _salutation = _getSalutation();
-    _leadsCount = _updateLeadsCount();
     super.initState();
-  }
-
-  Future<int> _updateLeadsCount() async {
-    try {
-      final totalLeadsCount =
-          await _leadsServices.getTotalLeadsCount(ownerUserId: userId);
-      return totalLeadsCount;
-    } catch (e) {
-      // Handle any errors that may occur during count retrieval
-      // You can customize the error message based on the specific exception if needed
-      return (0);
-    }
   }
 
   String _getSalutation() {
