@@ -45,27 +45,35 @@ class FirebaseCloudStorage {
     }
   }
 
-  //Read leads
-  Stream<Iterable<CloudLead>> allLeads({required String ownerUserId}) =>
-      leads.snapshots().map((event) => event.docs
-          .map((doc) => CloudLead.fromSnapshot(doc))
-          .where((lead) => lead.ownerUserId == ownerUserId));
+  //Stream
+  Stream<Iterable<CloudLead>> allLeads({
+    required String ownerUserId,
+  }) =>
+      leads.snapshots().map(
+            (event) => event.docs
+                .map(
+                  (doc) => CloudLead.fromSnapshot(doc),
+                )
+                .where((lead) => lead.ownerUserId == ownerUserId),
+          );
 
 //count records.
   Future<int> getTotalLeadsCount({required String ownerUserId}) async {
     try {
-      final snapshot = await leads
-          .where(
-            ownerUserIdFieldName,
-            isEqualTo: ownerUserId,
-          )
-          .get();
-      return snapshot.size;
+      int totalCount = 0;
+
+      await for (Iterable<CloudLead> leadsIterable
+          in allLeads(ownerUserId: ownerUserId)) {
+        totalCount += leadsIterable.length;
+      }
+
+      return totalCount;
     } catch (e) {
       throw CouldNotGetTotalLeadsException();
     }
   }
 
+  //Read leads
   Future<Iterable<CloudLead>> getLeads({required String ownerUserId}) async {
     try {
       return await leads

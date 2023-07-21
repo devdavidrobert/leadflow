@@ -22,25 +22,25 @@ class _LeadsViewState extends State<LeadsView> {
   String get userId => AuthService.firebase().currentUser!.id;
   String get userEmail => AuthService.firebase().currentUser!.email;
   late String _salutation;
-  late String _leadsCount;
+  late Future<int> _leadsCount;
 
   @override
   void initState() {
     _leadsServices = FirebaseCloudStorage();
     _salutation = _getSalutation();
-    _updateLeadsCount();
-    _leadsCount;
+    _leadsCount = _updateLeadsCount();
     super.initState();
   }
 
-  _updateLeadsCount() async {
+  Future<int> _updateLeadsCount() async {
     try {
       final totalLeadsCount =
           await _leadsServices.getTotalLeadsCount(ownerUserId: userId);
-      _leadsCount = totalLeadsCount.toString();
+      return totalLeadsCount;
     } catch (e) {
       // Handle any errors that may occur during count retrieval
-      // print("Error fetching leads count: $e");
+      // You can customize the error message based on the specific exception if needed
+      return (0);
     }
   }
 
@@ -124,43 +124,6 @@ class _LeadsViewState extends State<LeadsView> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(0),
-              child: Card(
-                child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: ListTile(
-                    title: Center(
-                      child: Text(
-                        _leadsCount,
-                        style: const TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                    ),
-                    subtitle: const Center(
-                      child: Text(
-                        'LEADS CREATED',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 25.0),
-            const Text(
-              'RECENT LEADS',
-              textAlign: TextAlign.end,
-              style: TextStyle(
-                fontSize: 12,
-                // decoration: TextDecoration.underline,
-              ),
-            ),
             Expanded(
               child: StreamBuilder(
                 stream: _leadsServices.allLeads(
