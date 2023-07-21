@@ -33,11 +33,11 @@ class _LeadsViewState extends State<LeadsView> {
   String _getSalutation() {
     final now = DateTime.now();
     if (now.hour >= 0 && now.hour < 12) {
-      return 'Good morning';
+      return 'GOOD MORNING,';
     } else if (now.hour >= 12 && now.hour < 17) {
-      return 'Good afternoon';
+      return 'GOOD AFTERNOON,';
     } else {
-      return 'Good evening';
+      return 'GOOD EVENING,';
     }
   }
 
@@ -58,6 +58,7 @@ class _LeadsViewState extends State<LeadsView> {
                 fontSize: 12,
               ),
             ),
+            const SizedBox(height: 5.0),
             Text(
               userEmail,
               style: const TextStyle(

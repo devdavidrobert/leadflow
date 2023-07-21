@@ -135,7 +135,13 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
   //deleting a lead => this is called when one exits without writing anything
   void _deleteLeadIfTextIsEmpty() {
     final lead = _lead;
-    if (_commentController.text.isEmpty && lead != null) {
+    if (_phoneNumberController.text.isEmpty &&
+        _prospectNameController.text.isEmpty &&
+        _dateController.text.isEmpty &&
+        _packageController.text.isEmpty &&
+        _activityController.text.isEmpty &&
+        _commentController.text.isEmpty &&
+        lead != null) {
       _leadsServices.deleteLead(
         documentId: lead.documentId,
       );

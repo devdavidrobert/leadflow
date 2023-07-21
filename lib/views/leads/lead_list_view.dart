@@ -108,54 +108,52 @@ class LeadsListView extends StatelessWidget {
               final remainingDays =
                   parsedAppointmentDate.difference(parsedNowDate).inDays;
 
-              return Card(
-                child: ListTile(
-                  onTap: () {
-                    onTap(lead);
-                  },
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.blue[100],
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        remainingDays.toString(),
-                        textAlign: TextAlign.center,
-                      ),
+              return ListTile(
+                onTap: () {
+                  onTap(lead);
+                },
+                leading: CircleAvatar(
+                  backgroundColor: Colors.blue[100],
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      remainingDays.toString(),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  title: Text(
-                    lead.name,
-                    maxLines: 1,
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 12,
-                    ),
+                ),
+                title: Text(
+                  lead.name,
+                  maxLines: 1,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12,
                   ),
-                  subtitle: Text(
-                    lead.package,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      fontSize: 10,
-                    ),
+                ),
+                subtitle: Text(
+                  lead.package,
+                  maxLines: 1,
+                  style: const TextStyle(
+                    fontSize: 10,
                   ),
-                  trailing: CircleAvatar(
-                    backgroundColor: Colors.green[100],
-                    child: IconButton(
-                      onPressed: () async {
-                        final callPhone = lead.phoneNumber;
-                        final Uri url = Uri(
-                          scheme: 'tel',
-                          path: "+254$callPhone",
-                        );
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(url);
-                        } else {
-                          throw 'Could not launch $url';
-                        }
-                      },
-                      icon: const Icon(Icons.call),
-                    ),
+                ),
+                trailing: CircleAvatar(
+                  backgroundColor: Colors.green[100],
+                  child: IconButton(
+                    onPressed: () async {
+                      final callPhone = lead.phoneNumber;
+                      final Uri url = Uri(
+                        scheme: 'tel',
+                        path: "+254$callPhone",
+                      );
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    },
+                    icon: const Icon(Icons.call),
                   ),
                 ),
               );
