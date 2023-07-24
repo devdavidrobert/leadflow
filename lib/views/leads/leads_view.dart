@@ -1,3 +1,4 @@
+// Import statements
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leadflow/const/routes.dart';
@@ -10,6 +11,7 @@ import 'package:leadflow/services/cloud/firebase_cloud_storage.dart';
 import 'package:leadflow/utilities/dialogs/logout_dialog.dart';
 import 'package:leadflow/views/leads/lead_list_view.dart';
 
+// LeadsView Widget
 class LeadsView extends StatefulWidget {
   const LeadsView({Key? key}) : super(key: key);
 
@@ -18,11 +20,13 @@ class LeadsView extends StatefulWidget {
 }
 
 class _LeadsViewState extends State<LeadsView> {
+  // Fields
   late final FirebaseCloudStorage _leadsServices;
   String get userId => AuthService.firebase().currentUser!.id;
-  String get userEmail => AuthService.firebase().currentUser!.email;
+  String? get name => AuthService.firebase().currentUser!.name;
   late String _salutation;
 
+  // Initialize fields in initState
   @override
   void initState() {
     _leadsServices = FirebaseCloudStorage();
@@ -30,18 +34,19 @@ class _LeadsViewState extends State<LeadsView> {
     super.initState();
   }
 
+  // Get the appropriate salutation based on the time of day
   String _getSalutation() {
     final now = DateTime.now();
     if (now.hour >= 0 && now.hour < 12) {
-      return 'GOOD MORNING,';
+      return 'Good morning,';
     } else if (now.hour >= 12 && now.hour < 17) {
-      return 'GOOD AFTERNOON,';
+      return 'Good afternoon,';
     } else {
-      return 'GOOD EVENING,';
+      return 'Good evening,';
     }
   }
 
-  //screen structure
+  // Build the UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,17 +63,18 @@ class _LeadsViewState extends State<LeadsView> {
                 fontSize: 12,
               ),
             ),
-            const SizedBox(height: 5.0),
+            const SizedBox(height: 2.0),
             Text(
-              userEmail,
+              name!,
               style: const TextStyle(
                 color: Colors.blue,
-                fontSize: 10,
+                fontSize: 12,
               ),
             ),
           ],
         ),
         actions: [
+          // Add lead button
           IconButton(
             onPressed: () {
               Navigator.of(context).pushNamed(createOrUpdateLeadRoute);
@@ -78,6 +84,7 @@ class _LeadsViewState extends State<LeadsView> {
               color: Colors.black,
             ),
           ),
+          // Logout button in a popup menu
           PopupMenuButton<MenuAction>(
             itemBuilder: (context) {
               return const [
@@ -92,7 +99,7 @@ class _LeadsViewState extends State<LeadsView> {
                 ),
               ];
             },
-            color: Colors.black, // Set the background color to white
+            color: Colors.black, // Set the background color to black
             onSelected: (value) async {
               switch (value) {
                 case MenuAction.logout:
@@ -112,9 +119,10 @@ class _LeadsViewState extends State<LeadsView> {
         child: Column(
           children: [
             Expanded(
+              // Display leads using StreamBuilder
               child: StreamBuilder(
                 stream: _leadsServices.allLeads(
-                  ownerUserId: userId,
+                  ownerUserId: userId, appointDate: '',
                 ),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
@@ -137,10 +145,10 @@ class _LeadsViewState extends State<LeadsView> {
                           },
                         );
                       } else {
-                        return Container();
+                        return Container(); // Placeholder while loading data
                       }
                     default:
-                      return Container();
+                      return Container(); // Placeholder in other cases
                   }
                 },
               ),

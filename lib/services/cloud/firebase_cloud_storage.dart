@@ -48,22 +48,26 @@ class FirebaseCloudStorage {
   //Stream
   Stream<Iterable<CloudLead>> allLeads({
     required String ownerUserId,
+    required String appointDate,
   }) =>
       leads.snapshots().map(
             (event) => event.docs
                 .map(
                   (doc) => CloudLead.fromSnapshot(doc),
                 )
-                .where((lead) => lead.ownerUserId == ownerUserId),
+                .where((lead) =>
+                    lead.ownerUserId == ownerUserId &&
+                    lead.appointDate == appointDate),
           );
 
 //count records.
-  Future<int> getTotalLeadsCount({required String ownerUserId}) async {
+  Future<int> getTotalLeadsCount(
+      {required String ownerUserId, required String appointDate}) async {
     try {
       int totalCount = 0;
 
       await for (Iterable<CloudLead> leadsIterable
-          in allLeads(ownerUserId: ownerUserId)) {
+          in allLeads(ownerUserId: ownerUserId, appointDate: appointDate)) {
         totalCount += leadsIterable.length;
       }
 

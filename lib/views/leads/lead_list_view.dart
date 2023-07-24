@@ -22,6 +22,7 @@ class LeadsListView extends StatelessWidget {
     // Sort leads by remainingDays in ascending order
     List<CloudLead> sortedLeads = [...leads];
     sortedLeads.sort((a, b) {
+      // Extract dates from strings
       var now = DateTime.now();
       var formatter = DateFormat('yyyy-MM-dd');
       String formatNow = formatter.format(now);
@@ -44,12 +45,14 @@ class LeadsListView extends StatelessWidget {
 
     var totalLeads = sortedLeads.length;
 
+    // Build the UI
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
+              // Card displaying total number of leads
               ClipRRect(
                 borderRadius: BorderRadius.circular(0),
                 child: Card(
@@ -82,20 +85,22 @@ class LeadsListView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 25.0),
+        // Header for recent leads
         const Text(
           'RECENT LEADS',
           textAlign: TextAlign.end,
           style: TextStyle(
             fontSize: 12,
-            // decoration: TextDecoration.underline,
           ),
         ),
         Expanded(
+          // List view of sorted leads
           child: ListView.builder(
             itemCount: sortedLeads.length,
             itemBuilder: (context, index) {
               final lead = sortedLeads[index];
 
+              // Calculate remaining days
               var now = DateTime.now();
               var formatter = DateFormat('yyyy-MM-dd');
               String formatNow = formatter.format(now);
@@ -108,12 +113,22 @@ class LeadsListView extends StatelessWidget {
               final remainingDays =
                   parsedAppointmentDate.difference(parsedNowDate).inDays;
 
+              // Set circleColor based on remaining days
+              Color circleColor;
+              if (remainingDays < 0) {
+                circleColor = Colors.red;
+              } else if (remainingDays == 0) {
+                circleColor = Colors.green;
+              } else {
+                circleColor = Colors.blue;
+              }
+
               return ListTile(
                 onTap: () {
                   onTap(lead);
                 },
                 leading: CircleAvatar(
-                  backgroundColor: Colors.blue[100],
+                  backgroundColor: circleColor,
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(

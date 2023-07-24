@@ -35,6 +35,8 @@ class AuthEventRegister extends AuthEvent {
   );
 }
 
+class AuthEventSignInWithGoogle extends AuthEvent {}
+
 //should register
 class AuthEventShouldRegister extends AuthEvent {
   const AuthEventShouldRegister();
