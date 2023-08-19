@@ -65,13 +65,6 @@ class HomePage extends StatelessWidget {
         } else {
           return const Scaffold(
               //   body: CircularProgressIndicator(
-              //     value: 0.5,
-              //     strokeWidth: 4,
-              //     backgroundColor: Colors.grey,
-              //     valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-              //   ),
-              //
-              //
               );
         }
       },
