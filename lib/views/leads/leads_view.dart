@@ -23,7 +23,6 @@ class _LeadsViewState extends State<LeadsView> {
   // Fields
   late final FirebaseCloudStorage _leadsServices;
   String get userId => AuthService.firebase().currentUser!.id;
-  String? get name => AuthService.firebase().currentUser!.name;
   late String _salutation;
 
   // Initialize fields in initState
@@ -64,13 +63,6 @@ class _LeadsViewState extends State<LeadsView> {
               ),
             ),
             const SizedBox(height: 2.0),
-            Text(
-              name!,
-              style: const TextStyle(
-                color: Colors.blue,
-                fontSize: 12,
-              ),
-            ),
           ],
         ),
         actions: [
@@ -122,7 +114,8 @@ class _LeadsViewState extends State<LeadsView> {
               // Display leads using StreamBuilder
               child: StreamBuilder(
                 stream: _leadsServices.allLeads(
-                  ownerUserId: userId, appointDate: '',
+                  ownerUserId: userId,
+                  appointDate: '',
                 ),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {

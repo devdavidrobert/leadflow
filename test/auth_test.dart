@@ -151,8 +151,4 @@ class MockAuthProvider implements AuthProvider {
     throw UnimplementedError();
   }
 
-  @override
-  Future<AuthUser> signInWithGoogle() {
-    throw UnimplementedError();
-  }
 }

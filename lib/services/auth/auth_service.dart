@@ -65,6 +65,6 @@ class AuthService implements AuthProvider {
         toEmail: toEmail,
       );
 
-  @override
-  Future<AuthUser> signInWithGoogle() => provider.signInWithGoogle();
+  // @override
+  // Future<AuthUser> signInWithGoogle() => provider.signInWithGoogle();
 }
