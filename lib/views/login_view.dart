@@ -19,6 +19,7 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _phonenumber;
   late final TextEditingController _password;
+  late final TextEditingController _username;
 
   get leadflow => null;
 
@@ -27,6 +28,7 @@ class _LoginViewState extends State<LoginView> {
     _email = TextEditingController();
     _phonenumber = TextEditingController();
     _password = TextEditingController();
+    _username = TextEditingController();
     super.initState();
   }
 
@@ -35,6 +37,7 @@ class _LoginViewState extends State<LoginView> {
     _email.dispose();
     _phonenumber.dispose();
     _password.dispose();
+    _username.dispose();
     super.dispose();
   }
 
@@ -66,7 +69,7 @@ class _LoginViewState extends State<LoginView> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: const Text('LOGIN'),
+          title: const Text(''),
           titleTextStyle: const TextStyle(
             color: Colors.blue,
             fontSize: 20,
@@ -75,10 +78,107 @@ class _LoginViewState extends State<LoginView> {
         backgroundColor: const Color(0xFFffffff),
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Center(
+                  child:
+                      //Google sign
+                      Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            try {
+                              context
+                                  .read<AuthBloc>()
+                                  .add(AuthEventSignInWithGoogle());
+                            } catch (e) {
+                              await showErrorDialog(
+                                context,
+                                '$e',
+                              );
+                            }
+                          },
+                          icon: Image.asset(
+                            'assets/images/business.png',
+                            width: 40,
+                            height: 40,
+                          ),
+                        ),
+                        const Text(""),
+                      ],
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Welcome to Your Lead Gen",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: TextFormField(
+                    controller: _email,
+                    decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                        width: 2,
+                        color: Colors.green,
+                      )),
+                      labelText: 'Enter your username',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: TextFormField(
+                    controller: _password,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                        width: 2,
+                        color: Colors.green,
+                      )),
+                      labelText: 'Enter your password',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final email = _email.text;
+                        final password = _password.text;
+                        context.read()<AuthBloc>().add(
+                              AuthEventLogIn(email, password),
+                            );
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      )),
+                      child: const Text("Login"),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("-------- OR --------"),
+                ),
                 Center(
                   child:
                       //Google sign
@@ -86,7 +186,7 @@ class _LoginViewState extends State<LoginView> {
                     child: Card(
                       child: Center(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             IconButton(
                               onPressed: () async {
@@ -107,7 +207,42 @@ class _LoginViewState extends State<LoginView> {
                                 height: 24,
                               ),
                             ),
-                            const Text("Sign-in with Google")
+                            const Text("Sign in with Google"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child:
+                      //Google sign
+                      ClipRRect(
+                    child: Card(
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              onPressed: () async {
+                                try {
+                                  context
+                                      .read<AuthBloc>()
+                                      .add(AuthEventSignInWithGoogle());
+                                } catch (e) {
+                                  await showErrorDialog(
+                                    context,
+                                    '$e',
+                                  );
+                                }
+                              },
+                              icon: Image.asset(
+                                'assets/images/microsoft.png',
+                                width: 24,
+                                height: 24,
+                              ),
+                            ),
+                            const Text("Sign in with Microsoft"),
                           ],
                         ),
                       ),
