@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:leadflow/services/auth/auth_user.dart';
 
-//outputs for the bloc
 @immutable
 abstract class AuthState {
   final bool isLoading;
@@ -13,23 +12,19 @@ abstract class AuthState {
   });
 }
 
-//on Uninitialize state
 class AuthStateUninitialized extends AuthState {
-  const AuthStateUninitialized({
-    required bool isLoading,
-  }) : super(isLoading: isLoading);
+  const AuthStateUninitialized({required bool isLoading})
+      : super(isLoading: isLoading);
 }
 
-//Registering state
 class AuthStateRegistering extends AuthState {
   final Exception? exception;
   const AuthStateRegistering({
-    required isLoading,
     required this.exception,
+    required isLoading,
   }) : super(isLoading: isLoading);
 }
 
-//forgot password state
 class AuthStateForgotPassword extends AuthState {
   final Exception? exception;
   final bool hasSentEmail;
@@ -37,12 +32,9 @@ class AuthStateForgotPassword extends AuthState {
     required this.exception,
     required this.hasSentEmail,
     required bool isLoading,
-  }) : super(
-          isLoading: isLoading,
-        );
+  }) : super(isLoading: isLoading);
 }
 
-//logged in state
 class AuthStateLoggedIn extends AuthState {
   final AuthUser user;
   const AuthStateLoggedIn({
@@ -51,14 +43,11 @@ class AuthStateLoggedIn extends AuthState {
   }) : super(isLoading: isLoading);
 }
 
-//user verify email
 class AuthStateNeedsVerification extends AuthState {
-  const AuthStateNeedsVerification({
-    required bool isLoading,
-  }) : super(isLoading: isLoading);
+  const AuthStateNeedsVerification({required bool isLoading})
+      : super(isLoading: isLoading);
 }
 
-//logged out state
 class AuthStateLoggedOut extends AuthState with EquatableMixin {
   final Exception? exception;
   const AuthStateLoggedOut({

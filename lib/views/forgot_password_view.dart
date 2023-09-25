@@ -7,7 +7,7 @@ import 'package:leadflow/utilities/dialogs/error_dialog.dart';
 import 'package:leadflow/utilities/dialogs/pasword_reset_email_sent_dialo.dart';
 
 class ForgotPasswordView extends StatefulWidget {
-  const ForgotPasswordView({super.key});
+  const ForgotPasswordView({Key? key}) : super(key: key);
 
   @override
   State<ForgotPasswordView> createState() => _ForgotPasswordViewState();

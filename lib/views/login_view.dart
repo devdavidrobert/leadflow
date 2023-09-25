@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leadflow/services/auth/auth_exceptions.dart';
@@ -8,39 +6,18 @@ import 'package:leadflow/services/auth/bloc/auth_event.dart';
 import 'package:leadflow/services/auth/bloc/auth_state.dart';
 import 'package:leadflow/utilities/dialogs/error_dialog.dart';
 
-class LoginView extends StatefulWidget {
+class LoginView extends StatelessWidget {
   const LoginView({Key? key}) : super(key: key);
 
   @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
-  late final TextEditingController _email;
-  late final TextEditingController _password;
-
-  get leadflow => null;
-
-  @override
-  void initState() {
-    _email = TextEditingController();
-    _password = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _email.dispose();
-    _password.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final TextEditingController _emailController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateLoggedOut) {
-          //Log in Exceptions
+          // Handle login exceptions gracefully
           if (state.exception is UserNotFoundAuthException) {
             await showErrorDialog(
               context,
@@ -77,35 +54,17 @@ class _LoginViewState extends State<LoginView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Login Title
                   Center(
-                    child:
-                        //Google sign
-                        Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () async {
-                              try {
-                                context
-                                    .read<AuthBloc>()
-                                    .add(AuthEventSignInWithGoogle());
-                              } catch (e) {
-                                await showErrorDialog(
-                                  context,
-                                  '$e',
-                                );
-                              }
-                            },
-                            icon: Image.asset(
-                              'assets/images/business.png',
-                              width: 40,
-                              height: 40,
-                            ),
-                          ),
-                          const Text(""),
-                        ],
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/business.png',
+                          width: 40,
+                          height: 40,
+                        )
+                      ],
                     ),
                   ),
                   const Padding(
@@ -118,32 +77,40 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                   ),
+                  // Email input field
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 16),
-                    child: TextField(
-                      controller: _email,
-                      enableSuggestions: false,
-                      autocorrect: false,
+                    child: TextFormField(
+                      textAlign: TextAlign.center,
+                      controller: _emailController,
+                      autocorrect: true,
+                      enableSuggestions: true,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         hintText: 'Enter Your Email',
                       ),
                     ),
                   ),
+                  // Password input field
                   Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 16),
-                      child: TextField(
-                        controller: _password,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 16),
+                    child: Center(
+                      child: TextFormField(
+                        textAlign: TextAlign.center,
+                        controller: _passwordController,
                         obscureText: true,
-                        enableSuggestions: false,
                         autocorrect: false,
                         keyboardType: TextInputType.visiblePassword,
                         decoration: const InputDecoration(
                           hintText: 'Enter Your Password',
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
+
+                  // Login button
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
@@ -151,89 +118,76 @@ class _LoginViewState extends State<LoginView> {
                       height: 40,
                       child: ElevatedButton(
                         onPressed: () async {
-                          final email = _email.text;
-                          final password = _password.text;
-                          context.read()<AuthBloc>().add(
+                          final email = _emailController.text;
+                          final password = _passwordController.text;
+                          context.read<AuthBloc>().add(
                                 AuthEventLogIn(email, password),
                               );
                         },
                         style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        )),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          // Define button styling here
+                        ),
                         child: const Text("Login"),
                       ),
                     ),
                   ),
+                  // Space in-between
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text("-------- OR --------"),
                   ),
+                  // Google sign-in
                   Center(
-                    child:
-                        //Google sign
-                        ClipRRect(
+                    child: ClipRRect(
                       child: Card(
                         child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              IconButton(
-                                onPressed: () async {
-                                  try {
-                                    context
-                                        .read<AuthBloc>()
-                                        .add(AuthEventSignInWithGoogle());
-                                  } catch (e) {
-                                    await showErrorDialog(
-                                      context,
-                                      '$e',
-                                    );
-                                  }
-                                },
-                                icon: Image.asset(
-                                  'assets/images/google_logo.png',
-                                  width: 24,
-                                  height: 24,
+                          child: InkWell(
+                            onTap: () async {
+                              // Handle Google sign-in
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () async {},
+                                  icon: Image.asset(
+                                    'assets/images/google_logo.png',
+                                    width: 24,
+                                    height: 24,
+                                  ),
                                 ),
-                              ),
-                              const Text("Sign in with Google"),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
+                  // Microsoft sign-in
                   Center(
-                    child:
-                        //Google sign
-                        ClipRRect(
+                    child: ClipRRect(
                       child: Card(
                         child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              IconButton(
-                                onPressed: () async {
-                                  try {
-                                    context
-                                        .read<AuthBloc>()
-                                        .add(AuthEventSignInWithGoogle());
-                                  } catch (e) {
-                                    await showErrorDialog(
-                                      context,
-                                      '$e',
-                                    );
-                                  }
-                                },
-                                icon: Image.asset(
-                                  'assets/images/microsoft.png',
-                                  width: 24,
-                                  height: 24,
+                          child: InkWell(
+                            onTap: () async {
+                              // Handle Google sign-in
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () async {},
+                                  icon: Image.asset(
+                                    'assets/images/microsoft.png',
+                                    width: 24,
+                                    height: 24,
+                                  ),
                                 ),
-                              ),
-                              const Text("Sign in with Microsoft"),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
