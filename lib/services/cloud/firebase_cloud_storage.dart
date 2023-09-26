@@ -56,8 +56,8 @@ class FirebaseCloudStorage {
                   (doc) => CloudLead.fromSnapshot(doc),
                 )
                 .where((lead) =>
-                    lead.ownerUserId == ownerUserId &&
-                    lead.appointDate == appointDate),
+                    lead.ownerUserId == ownerUserId && lead.appointDate != null)
+                .toList(),
           );
 
 //count records.

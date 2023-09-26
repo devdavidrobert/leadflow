@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:intl/intl.dart';
 import 'package:leadflow/services/cloud/cloud_lead.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -123,55 +124,125 @@ class LeadsListView extends StatelessWidget {
                 circleColor = Colors.blue;
               }
 
-              return ListTile(
-                onTap: () {
-                  onTap(lead);
-                },
-                leading: CircleAvatar(
-                  backgroundColor: circleColor,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      remainingDays.toString(),
-                      textAlign: TextAlign.center,
+              return Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          )
+                        ]),
+                    height: 60,
+                    child: Center(
+                      child: InkWell(
+                        onTap: () {
+                          onTap(lead);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 12, bottom: 10),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 15,
+                                backgroundColor: circleColor,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    remainingDays.toString(),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      lead.name,
+                                      maxLines: 1,
+                                      softWrap: true,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      lead.package,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      lead.appointDate,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor: Colors.green[100],
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: IconButton(
+                                        onPressed: () async {
+                                          final callPhone = lead.phoneNumber;
+                                          final Uri url = Uri(
+                                            scheme: 'tel',
+                                            path: "+254$callPhone",
+                                          );
+                                          if (await canLaunchUrl(url)) {
+                                            await launchUrl(url);
+                                          } else {
+                                            throw 'Could not launch $url';
+                                          }
+                                        },
+                                        icon: const Icon(
+                                          Icons.call,
+                                          size: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                title: Text(
-                  lead.name,
-                  maxLines: 1,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
-                subtitle: Text(
-                  lead.package,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 10,
-                  ),
-                ),
-                trailing: CircleAvatar(
-                  backgroundColor: Colors.green[100],
-                  child: IconButton(
-                    onPressed: () async {
-                      final callPhone = lead.phoneNumber;
-                      final Uri url = Uri(
-                        scheme: 'tel',
-                        path: "+254$callPhone",
-                      );
-                      if (await canLaunchUrl(url)) {
-                        await launchUrl(url);
-                      } else {
-                        throw 'Could not launch $url';
-                      }
-                    },
-                    icon: const Icon(Icons.call),
-                  ),
-                ),
-              );
+                  ));
             },
           ),
         ),

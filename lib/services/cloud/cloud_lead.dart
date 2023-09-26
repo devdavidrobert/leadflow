@@ -36,6 +36,4 @@ class CloudLead {
         package = snapshot.data()[textFieldPackage] as String,
         phoneNumber = snapshot.data()[textFieldPhoneNumber] as int,
         isTv = snapshot.data()[textFieldIsTv] as bool;
-
-  get status => null;
 }
