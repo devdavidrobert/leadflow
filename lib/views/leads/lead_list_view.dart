@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:intl/intl.dart';
 import 'package:leadflow/services/cloud/cloud_lead.dart';
 import 'package:url_launcher/url_launcher.dart';
