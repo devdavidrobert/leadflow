@@ -13,8 +13,18 @@ Future<T?> showGenericDialog<T>({
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text(title),
-        content: Text(content),
+        title: Text(
+          title,
+          textAlign: TextAlign.center, // Center the title text
+          style: const TextStyle(
+            fontWeight: FontWeight.bold, // Make the title text bold
+            decoration: TextDecoration.underline, // Underline the title text
+          ),
+        ),
+        content: Text(
+          content,
+          textAlign: TextAlign.center,
+        ),
         actions: options.keys.map((optionTitle) {
           final value = options[optionTitle];
           return Center(

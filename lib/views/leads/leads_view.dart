@@ -25,24 +25,24 @@ class _LeadsViewState extends State<LeadsView> {
   String get userId => AuthService.firebase().currentUser!.id;
   late String _salutation;
 
+  // Get the appropriate salutation based on the time of day
+  String _getSalutation() {
+    final now = DateTime.now();
+    if (now.hour >= 0 && now.hour < 12) {
+      return 'Good morning';
+    } else if (now.hour >= 12 && now.hour < 17) {
+      return 'Good afternoon';
+    } else {
+      return 'Good evening';
+    }
+  }
+
   // Initialize fields in initState
   @override
   void initState() {
     _leadsServices = FirebaseCloudStorage();
     _salutation = _getSalutation();
     super.initState();
-  }
-
-  // Get the appropriate salutation based on the time of day
-  String _getSalutation() {
-    final now = DateTime.now();
-    if (now.hour >= 0 && now.hour < 12) {
-      return 'Good morning,';
-    } else if (now.hour >= 12 && now.hour < 17) {
-      return 'Good afternoon,';
-    } else {
-      return 'Good evening,';
-    }
   }
 
   // Build the UI

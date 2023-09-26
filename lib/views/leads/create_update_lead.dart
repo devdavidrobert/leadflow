@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:leadflow/services/auth/auth_service.dart';
 import 'package:leadflow/services/cloud/cloud_lead.dart';
 import 'package:leadflow/services/cloud/firebase_cloud_storage.dart';
+import 'package:leadflow/utilities/dialogs/cannot_create_update_empty_lead.dart';
 import 'package:leadflow/utilities/dialogs/cannot_share_empty_lead_dialog.dart';
 import 'package:leadflow/utilities/dialogs/generics/get_arguments.dart';
 import 'package:share_plus/share_plus.dart';
@@ -487,7 +488,39 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                   // Save Button
                   ElevatedButton(
                     onPressed: () async {
-                      Navigator.of(context).pop();
+                      // Get the values from the controllers
+                      final name = _prospectNameController.text;
+                      final comment = _commentController.text;
+                      final phone = _phoneNumberController.text;
+                      final appointDate = _dateController.text;
+                      final package = _packageController.text;
+                      final activity = _activityController.text;
+                      final isSale = _saleCheckboxController.value;
+
+                      // Check if any of the required fields are empty
+                      if (comment.isEmpty ||
+                          name.isEmpty ||
+                          phone.isEmpty ||
+                          package.isEmpty ||
+                          appointDate.isEmpty) {
+                        await showCannotCreateUpdateEmptyLead(context);
+                      } else {
+                        // Save the data to the database
+                        await _leadsServices.updateLead(
+                          documentId: _lead!.documentId,
+                          comment: comment,
+                          name: name,
+                          activity: activity,
+                          appointDate: appointDate,
+                          isSale: isSale,
+                          package: package,
+                          phoneNumber: int.tryParse(phone) ?? 0,
+                          isTv: false,
+                        );
+
+                        // Navigate back to the previous screen
+                        Navigator.of(context).pop();
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(327, 40),
@@ -501,7 +534,7 @@ class _CreateUpdateLeadViewState extends State<CreateUpdateLeadView> {
                     child: const Text(
                       'Save',
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

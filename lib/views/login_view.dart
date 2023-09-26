@@ -61,8 +61,7 @@ class LoginView extends StatelessWidget {
                       children: [
                         Image.asset(
                           'assets/images/business.png',
-                          width: 40,
-                          height: 40,
+                          width: 100,
                         )
                       ],
                     ),
