@@ -11,8 +11,8 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
@@ -71,8 +71,8 @@ class LoginView extends StatelessWidget {
                     child: Text(
                       "Welcome to Your Lead Gen",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontFamily: 'Montserrat-ExtraBold',
+                        fontSize: 25,
                       ),
                     ),
                   ),
@@ -82,7 +82,7 @@ class LoginView extends StatelessWidget {
                         horizontal: 20, vertical: 16),
                     child: TextFormField(
                       textAlign: TextAlign.center,
-                      controller: _emailController,
+                      controller: emailController,
                       autocorrect: true,
                       enableSuggestions: true,
                       keyboardType: TextInputType.emailAddress,
@@ -98,7 +98,7 @@ class LoginView extends StatelessWidget {
                     child: Center(
                       child: TextFormField(
                         textAlign: TextAlign.center,
-                        controller: _passwordController,
+                        controller: passwordController,
                         obscureText: true,
                         autocorrect: false,
                         keyboardType: TextInputType.visiblePassword,
@@ -117,8 +117,8 @@ class LoginView extends StatelessWidget {
                       height: 40,
                       child: ElevatedButton(
                         onPressed: () async {
-                          final email = _emailController.text;
-                          final password = _passwordController.text;
+                          final email = emailController.text;
+                          final password = passwordController.text;
                           context.read<AuthBloc>().add(
                                 AuthEventLogIn(email, password),
                               );
