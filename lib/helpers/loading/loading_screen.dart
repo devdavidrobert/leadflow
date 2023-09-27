@@ -74,6 +74,11 @@ class LoadingScreen {
                           return Text(
                             snapshot.data as String,
                             textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           );
                         } else {
                           return Container();

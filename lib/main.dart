@@ -20,7 +20,20 @@ void main() {
     MaterialApp(
       title: 'Lead Flow',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontFamily: 'Montserrat',
+          ),
+          bodyMedium: TextStyle(
+            fontFamily: 'Montserrat',
+          ),
+          bodySmall: TextStyle(
+            fontFamily: 'Montserrat',
+          ),
+        ),
+      ),
       home: BlocProvider<AuthBloc>(
         create: (context) => AuthBloc(FirebaseAuthProvider()),
         child: const HomePage(),
@@ -68,7 +81,6 @@ class HomePage extends StatelessWidget {
               );
         }
       },
-      
     );
   }
 }

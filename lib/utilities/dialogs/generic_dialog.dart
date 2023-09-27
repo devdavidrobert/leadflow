@@ -13,17 +13,34 @@ Future<T?> showGenericDialog<T>({
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text(
-          title,
-          textAlign: TextAlign.center, // Center the title text
-          style: const TextStyle(
-            fontWeight: FontWeight.bold, // Make the title text bold
-            decoration: TextDecoration.underline, // Underline the title text
-          ),
+        title: Column(
+          // Wrap title and content in a Column
+          children: [
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Divider(
+              color: Colors.grey.shade500,
+              height: 10,
+            ), // Add a Divider between title and content
+          ],
         ),
-        content: Text(
-          content,
-          textAlign: TextAlign.center,
+        content: SizedBox(
+          child: Text(
+            content,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 12,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
         ),
         actions: options.keys.map((optionTitle) {
           final value = options[optionTitle];
@@ -39,14 +56,21 @@ Future<T?> showGenericDialog<T>({
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(200, 40),
+                    minimumSize: const Size(200, 30),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(50),
+                        Radius.circular(30),
                       ),
                     ),
                   ),
-                  child: Text(optionTitle),
+                  child: Text(
+                    optionTitle,
+                    style: const TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             ),

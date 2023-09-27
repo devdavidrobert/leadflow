@@ -12,7 +12,17 @@ CloseDialog showLoadingDialog({
       children: [
         const CircularProgressIndicator(),
         const SizedBox(height: 10.0),
-        Text(text),
+        Divider(
+          color: Colors.grey.shade500,
+        ),
+        Text(
+          text,
+          style: const TextStyle(
+            fontFamily: 'Montserrat',
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
     ),
   );
